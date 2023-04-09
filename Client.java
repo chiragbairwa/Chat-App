@@ -1,20 +1,26 @@
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
-class Client {  
-  public static void start() {
-    try {
-      Socket s = new Socket("localhost", 6666);
-      DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-      dout.writeUTF("Hello Server");
+class Client {
+  public static void main(String args[]) throws Exception {
+
+    Socket s = new Socket("localhost", 3333);
+    DataInputStream din = new DataInputStream(s.getInputStream());
+    DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+    
+    Scanner sc = new Scanner(System.in);
+
+    String str = "", str2 = "";
+    while (!str.equals("stop")) {
+      str = sc.nextLine();
+      dout.writeUTF(str);
       dout.flush();
-      dout.close();
-      s.close();
-    } catch (Exception e) {
-      System.out.println(e);
+      str2 = din.readUTF();
+      System.out.println("Server says: " + str2);
     }
-  }
-  public static void main(String[] args) {
-    start();
+
+    dout.close();
+    s.close();
   }
 }
